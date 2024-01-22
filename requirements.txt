@@ -1,0 +1,11 @@
+cmake
+dlib
+mediapipe
+ffmpeg
+ffmpeg-python
+imutils
+opencv-python
+Pillow
+scikit-image
+scipy
+spyder
