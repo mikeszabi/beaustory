@@ -8,4 +8,5 @@ opencv-python
 Pillow
 scikit-image
 scipy
-spyder
+openai
+streamlit
