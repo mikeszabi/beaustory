@@ -51,7 +51,7 @@ def make_delaunay(f_w, f_h, theList, img1, img2):
     i=0
     for p in points :
         i+=1
-        print(i)
+        # print(i)
         subdiv.insert(p)
 
     # Make a delaunay triangulation list.

@@ -27,6 +27,7 @@ face_model_file=r'./resources/models/shape_predictor_68_face_landmarks.dat'
 # Define Wrapper Function
 def doMorphing(img1, img2, duration, frame_rate,face_model_file):
     [size, img1, img2, points1, points2, list3] = generate_face_correspondences(img1, img2,face_model_file)
+    gif=[]
     if len(points1)>0 and len(points2)>0:
         tri = make_delaunay(size[1], size[0], list3, img1, img2)
         gif = generate_morph_sequence(duration, frame_rate, img1, img2, points1, points2, tri, size)
