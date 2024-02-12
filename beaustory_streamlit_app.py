@@ -71,10 +71,10 @@ if uploaded_file1 and uploaded_file2:
         # The message and nested widget will remain on the page
         
         with st.spinner('Elemezzük a képeket..'):
-            # html_data=analyze(image1,image2)
+            html_data=analyze(image1,image2)
             
-            with open('./outputs/out.html','r') as f: 
-                html_data = f.read()
+            # with open('./outputs/out.html','r') as f: 
+            #     html_data = f.read()
             
             soup = BeautifulSoup(html_data)
             local_css(r'./frontend/analyze_style.css')

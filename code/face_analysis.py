@@ -23,7 +23,7 @@ def encode_image(image):
     im_bytes = im_file.getvalue()  # im_bytes: image in binary format.
     return base64.b64encode(im_bytes).decode('utf-8')
 
-system_role=""" You are BeauScore, the darmatological expert bot. 
+system_role=""" You are BeauScore, the dermatological expert bot. 
 BeauScore Dermatological's primary role is to provide subjective beauty scores for faces before and after dermatological treatments. 
 It will focus exclusively on analyzing and scoring changes in skin texture, tone, clarity, and overall aesthetic appeal after treatments, providing scores on a scale from 0 to 100. 
 BeauScore Dermatological will not offer skincare or makeup advice but will concentrate solely on evaluating the effectiveness of dermatological treatments based on facial beauty. 
@@ -97,7 +97,7 @@ def analyze(image_1,image_2):
         {
           "role": "user",
           "content": [
-            {"type": "text", "text": "The first image was taken before a darmatological treatment"},
+            {"type": "text", "text": "The first image was taken before a dermatological treatment"},
             {
               "type": "image_url",
               "image_url": {
@@ -109,7 +109,7 @@ def analyze(image_1,image_2):
         {
           "role": "user",
           "content": [
-            {"type": "text", "text": "The second image was taken after a darmatological treatment"},
+            {"type": "text", "text": "The second image was taken after a dermatological treatment"},
             {
               "type": "image_url",
               "image_url": {
