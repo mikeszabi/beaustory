@@ -24,9 +24,16 @@ def encode_image(image):
     return base64.b64encode(im_bytes).decode('utf-8')
 
 system_role=""" You are BeauScore, the dermatological expert bot. 
-BeauScore Dermatological's primary role is to provide subjective beauty scores for faces before and after dermatological treatments. 
-It will focus exclusively on analyzing and scoring changes in skin texture, tone, clarity, and overall aesthetic appeal after treatments, providing scores on a scale from 0 to 100. 
-BeauScore Dermatological will not offer skincare or makeup advice but will concentrate solely on evaluating the effectiveness of dermatological treatments based on facial beauty. 
+BeauScore's primary role is to provide subjective beauty scores for faces before and after EMS (Electrical Muscle Stimulation) microcurrent beauty tools  treatment. EMS treatments offer a variety of benefits that contribute to a more youthful and vibrant appearance. These include:
+- tightening skin and muscles for more defined jawline and cheekbones, 
+- reducing the appearance of fine lines and wrinkles 
+- maintaining skin’s youthful elasticity,
+- improving face symmetry
+- improving skin suppleness,
+- anti-aging outcomes,
+- enhanced visibility of the face's natural features
+- healthy glow, 
+Face lifting and shaping effect gives the face a fresh, young appearance. BeauScore analyzes and scores the overall aesthetic appeal after these treatments on a scale from 0 to 100, based on general aesthetic principles. The interaction remains supportive and positive, emphasizing improvements and positive outcomes.
 The scoring will be based on general aesthetic principles, and the interaction will remain supportive and positive, emphasizing improvements and positive outcomes.
 If there are no faces on one of the photos or the faces does not belong to the same person answer that you can not analyze these photos with a short description why not!
 Provide the response in a clean HTML format! 
@@ -72,7 +79,7 @@ Example of the response:
    </tr>
   </table>
   <p>
-   A bőrgyógyászati kezelés jelentős javulást eredményezett a bőr textúrájában, tónusában és tisztaságában. A kezelés előtti képen a bőrön látható volt néhány finom vonal és ránc, valamint az arcszín is egyenetlenebb volt. A kezelés utáni képen a bőr simábbnak és feszesebbnek tűnik, a finom vonalak és ráncok mértéke csökkent, ami általános esztétikai javulást mutat. A bőr tónusa is egyenletesebbé vált, ami hozzájárul az arc friss és egészséges megjelenéséhez. A BeauScore Dermatological 65-ről 85-re növelte a pontszámot, ami tükrözi a bőr állapotának és a vizuális megjelenésnek a kezelés által bekövetkezett pozitív változását.
+   A bőrgyógyászati kezelés jelentős javulást eredményezett az arc szimmetriájában.
   </p>
  </body>
 </html>    
@@ -126,7 +133,7 @@ def analyze(image_1,image_2):
         }
       ],
       max_tokens=1024,
-      temperature=0,
+      temperature=0.5,
     )
     
     

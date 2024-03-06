@@ -49,8 +49,8 @@ def main():
 
     os.listdir(image_dir)
     
-    image1_name=os.path.join(image_dir,'Picture1.b.png')
-    image2_name=os.path.join(image_dir,'Picture1.a.png')
+    image1_name=os.path.join(image_dir,'before_DANI.png')
+    image2_name=os.path.join(image_dir,'after_DANI.png')
     
     image1 = Image.open(image1_name)
     image2 = Image.open(image2_name)

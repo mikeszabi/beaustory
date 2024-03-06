@@ -1,6 +1,5 @@
 cmake
 dlib
-mediapipe
 ffmpeg
 ffmpeg-python
 imutils

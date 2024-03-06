@@ -11,71 +11,54 @@ class NoFaceFound(Exception):
    """Raised when there is no face found"""
    pass
 
-def calculate_margin_help(img1,img2):
-    size1 = img1.shape
-    size2 = img2.shape
-    diff0 = abs(size1[0]-size2[0])//2
-    diff1 = abs(size1[1]-size2[1])//2
-    avg0 = (size1[0]+size2[0])//2
-    avg1 = (size1[1]+size2[1])//2
-
-    return [size1,size2,diff0,diff1,avg0,avg1]
-
-def crop_image(img1,img2):
-    [size1,size2,diff0,diff1,avg0,avg1] = calculate_margin_help(img1,img2)
-
-    if(size1[0] == size2[0] and size1[1] == size2[1]):
-        return [img1,img2]
-
-    elif(size1[0] <= size2[0] and size1[1] <= size2[1]):
-        scale0 = size1[0]/size2[0]
-        scale1 = size1[1]/size2[1]
-        if(scale0 > scale1):
-            res = cv2.resize(img2,None,fx=scale0,fy=scale0,interpolation=cv2.INTER_AREA)
-        else:
-            res = cv2.resize(img2,None,fx=scale1,fy=scale1,interpolation=cv2.INTER_AREA)
-        return crop_image_help(img1,res)
-
-    elif(size1[0] >= size2[0] and size1[1] >= size2[1]):
-        scale0 = size2[0]/size1[0]
-        scale1 = size2[1]/size1[1]
-        if(scale0 > scale1):
-            res = cv2.resize(img1,None,fx=scale0,fy=scale0,interpolation=cv2.INTER_AREA)
-        else:
-            res = cv2.resize(img1,None,fx=scale1,fy=scale1,interpolation=cv2.INTER_AREA)
-        return crop_image_help(res,img2)
-
-    elif(size1[0] >= size2[0] and size1[1] <= size2[1]):
-        return [img1[diff0:avg0,:],img2[:,-diff1:avg1]]
-    
+def rescale_and_pad_image(img1, img2):
+    # Determine which image is larger
+    firstSmaller=None
+    if img1.shape[0] * img1.shape[1] > img2.shape[0] * img2.shape[1]:
+        larger_img = img1
+        smaller_img = img2
+        firstSmaller=False
     else:
-        return [img1[:,diff1:avg1],img2[-diff0:avg0,:]]
+        larger_img = img2
+        smaller_img = img1
+        firstSmaller=True
 
-def crop_image_help(img1,img2):
-    [size1,size2,diff0,diff1,avg0,avg1] = calculate_margin_help(img1,img2)
+    # Calculate the scale factor, keeping the aspect ratio
+    height_ratio = larger_img.shape[0] / smaller_img.shape[0]
+    width_ratio = larger_img.shape[1] / smaller_img.shape[1]
+    scale_factor = min(height_ratio, width_ratio)
     
-    if(size1[0] == size2[0] and size1[1] == size2[1]):
-        return [img1,img2]
-
-    elif(size1[0] <= size2[0] and size1[1] <= size2[1]):
-        return [img1,img2[-diff0:avg0,-diff1:avg1]]
-
-    elif(size1[0] >= size2[0] and size1[1] >= size2[1]):
-        return [img1[diff0:avg0,diff1:avg1],img2]
-
-    elif(size1[0] >= size2[0] and size1[1] <= size2[1]):
-        return [img1[diff0:avg0,:],img2[:,-diff1:avg1]]
-
+    # Rescale the smaller image
+    new_size = (int(smaller_img.shape[1] * scale_factor), int(smaller_img.shape[0] * scale_factor))
+    resized_img = cv2.resize(smaller_img, new_size, interpolation=cv2.INTER_AREA)
+    
+    # Calculate padding sizes
+    pad_vertical = (larger_img.shape[0] - resized_img.shape[0]) // 2
+    pad_horizontal = (larger_img.shape[1] - resized_img.shape[1]) // 2
+    
+    # Create padded image
+    padded_img = cv2.copyMakeBorder(resized_img, 
+                                    pad_vertical, 
+                                    larger_img.shape[0] - resized_img.shape[0] - pad_vertical, 
+                                    pad_horizontal, 
+                                    larger_img.shape[1] - resized_img.shape[1] - pad_horizontal, 
+                                    cv2.BORDER_CONSTANT, 
+                                    value=[255, 255, 255]) # White padding
+    
+    if firstSmaller:
+        imgList=[padded_img,img2]
     else:
-        return [img1[:,diff1:avg1],img2[diff0:avg0,:]]
+        imgList=[img1,padded_img]
+    
+    return imgList
 
-def generate_face_correspondences(theImage1, theImage2, model_file):
+def generate_face_correspondences(img1, img2, model_file):
     # Detect the points of face.
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(model_file)
     corresp = np.zeros((68,2))
 
-    imgList = crop_image(theImage1,theImage2)
+    imgList = rescale_and_pad_image(img1,img2)
     list1 = []
     list2 = []
     j = 1
