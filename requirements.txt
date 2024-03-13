@@ -11,4 +11,5 @@ openai
 streamlit
 lxml
 python-dotenv
+beautifulsoup4
 
