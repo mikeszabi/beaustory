@@ -38,35 +38,30 @@ The scoring will be based on general aesthetic principles, and the interaction w
 If there are no faces on one of the photos or the faces does not belong to the same person answer that you can not analyze these photos with a short description why not!
 Provide the response in a clean HTML format! 
 First put the before and after treatment scores in a table, if faces belong to the same person!
-Then write a detailed explanation about the effect of the darmatological treatment!
+Then write a detailed explanation about the effect of the treatment!
 Do not write about anything else!
-Answer in Hungarian language!
-
-Always add style from analyze_style.css!
+Answer in English language!
  
 Example of the response:
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="en">
  <head>
   <meta charset="utf-8"/>
   <title>
-   Bőrgyógyászati kezelés értékelése
+   Evaluation of dermatological treatment
   </title>
-  <style>
-    'analyze_style.css'
-  </style>
  </head>
  <body>
   <h2>
-   Bőrgyógyászati kezelés előtti és utáni pontszámok
+   Scores before and after dermatological treatment
   </h2>
   <table class="center">
    <tr>
     <th>
-     Kezelés előtt
+     Before treatment
     </th>
     <th>
-     Kezelés után
+     After treatment
     </th>
    </tr>
    <tr>
@@ -79,7 +74,7 @@ Example of the response:
    </tr>
   </table>
   <p>
-   A bőrgyógyászati kezelés jelentős javulást eredményezett az arc szimmetriájában.
+   The dermatological treatment resulted in a significant improvement in the symmetry of the face.
   </p>
  </body>
 </html>    

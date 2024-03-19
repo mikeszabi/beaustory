@@ -27,13 +27,13 @@
   }
 
   th {
-    background-color: #007bff;
+    background-color: #f0d3a1;
     color: #000000;
     border-radius: 5px 5px 0 0;
   }
 
   td {
-    background-color: #e1ff00;
+    background-color: #f0b3f2;
   }
 
   tr:nth-child(even) {

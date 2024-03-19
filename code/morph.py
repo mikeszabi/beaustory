@@ -39,7 +39,7 @@ def create_gif(image1,image2):
     img1=cv2.cvtColor(np.array(image1), cv2.COLOR_RGB2BGR)
     img2=cv2.cvtColor(np.array(image2), cv2.COLOR_RGB2BGR)
     
-    gif=doMorphing(img1,img2,4,10,face_model_file)
+    gif=doMorphing(img1,img2,10,5,face_model_file)
     
     if len(gif)>0:
         gif[0].save(os.path.join(result_dir,f'{output}.gif'), save_all=True,optimize=False, append_images=gif[1:], loop=0)

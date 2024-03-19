@@ -1,15 +1,31 @@
-import sys
-import os
+# import sys
+# import os
 import dlib
-import glob
+# import glob
 import numpy as np
-from skimage import io
+# from skimage import io
 import cv2
-from imutils import face_utils
+# from imutils import face_utils
 
 class NoFaceFound(Exception):
    """Raised when there is no face found"""
    pass
+
+def resize_image_to_fixed_width(img, new_width):
+    
+    # Get the original dimensions of the image
+    (h, w) = img.shape[:2]
+    
+    # Calculate the ratio of the new width to the old width
+    ratio = new_width / float(w)
+    
+    # Calculate the new dimensions of the image
+    new_dimensions = (new_width, int(h * ratio))
+    
+    # Resize the image
+    resized_img = cv2.resize(img, new_dimensions, interpolation=cv2.INTER_AREA)
+    
+    return resized_img
 
 def rescale_and_pad_image(img1, img2):
     # Determine which image is larger
@@ -54,10 +70,34 @@ def rescale_and_pad_image(img1, img2):
 
 def generate_face_correspondences(img1, img2, model_file):
     # Detect the points of face.
+    # ToDo: refactor the CODE
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(model_file)
     corresp = np.zeros((68,2))
-
+    
+    ######## CROP FACES
+    dets = detector(img1, 1)
+    if len(dets) == 0:
+        print("Sorry, but I couldn't find a face in the first image.")
+    else:
+        rect=dets[0]
+        face_height=rect.bottom()-rect.top()
+        face_width=rect.right()-rect.left()
+        img1 = img1[max(0,int(rect.top()-face_height*0.5)):min(img1.shape[0]-1,int(rect.bottom()+face_height*0.2)), 
+                     max(0,int(rect.left()-face_width*0.2)):min(img1.shape[1]-1,int(rect.right()+face_width*0.2))]
+        img1 = resize_image_to_fixed_width(img1, 400)
+        
+    dets = detector(img2, 1)
+    if len(dets) == 0:
+        print("Sorry, but I couldn't find a face in the second image.")
+    else:
+        rect=dets[0]
+        face_height=rect.bottom()-rect.top()
+        face_width=rect.right()-rect.left()
+        img2 = img2[max(0,int(rect.top()-face_height*0.5)):min(img2.shape[0]-1,int(rect.bottom()+face_height*0.2)), 
+                     max(0,int(rect.left()-face_width*0.2)):min(img2.shape[1]-1,int(rect.right()+face_width*0.2))]
+        img2 = resize_image_to_fixed_width(img2, 400)
+    
     imgList = rescale_and_pad_image(img1,img2)
     list1 = []
     list2 = []
@@ -87,6 +127,7 @@ def generate_face_correspondences(img1, img2, model_file):
 
         for k, rect in enumerate(dets):
             
+                      
             # Get the landmarks/parts for the face in rect.
             shape = predictor(img, rect)
             # corresp = face_utils.shape_to_np(shape)
